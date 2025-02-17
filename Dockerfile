@@ -34,7 +34,7 @@ RUN cd /comfyui/custom_nodes/ComfyUI-ReActor && pip install -r requirements.txt 
 RUN cd /comfyui/models && mkdir -p ultralytics/bbox && cd ultralytics/bbox && wget https://huggingface.co/datasets/Gourieff/ReActor/raw/main/models/detection/bbox/face_yolov8m.pt
 
 RUN cd /comfyui/custom_nodes && git clone https://github.com/mav-rik/facerestore_cf.git
-RUN cd /comfyui/custom_nodes/facerestore_cf && ./install.sh
+RUN cd /comfyui/custom_nodes/facerestore_cf && pip3 install -r requirements.txt
 RUN cd /comfyui/models && mkdir facerestore_models && cd facerestore_models && \
  wget https://github.com/TencentARC/GFPGAN/releases/download/v1.3.4/GFPGANv1.4.pth && \
  wget https://github.com/sczhou/CodeFormer/releases/download/v0.1.0/codeformer.pth
