@@ -20,7 +20,17 @@ jobs:
       - name: Login to GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u dariayakovleva --password-stdin
 
+      - name: Free up disk space
+        run: |
+          echo "Cleaning up disk space..."
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/share/dotnet
+          sudo apt-get clean
+          sudo rm -rf /var/lib/apt/lists/*
+          df -h
+
       - name: Build and Push Docker Image
         run: |
-          docker build --platform linux/amd64 -t ghcr.io/dariayakovleva/comfyui-runpod:latest .
+          docker buildx --platform linux/amd64  --no-cache -t ghcr.io/dariayakovleva/comfyui-runpod:latest .
           docker push ghcr.io/dariayakovleva/comfyui-runpod:latest
