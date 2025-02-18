@@ -41,6 +41,9 @@ RUN cd /comfyui/models && mkdir facerestore_models && cd facerestore_models && \
 
 RUN cd /comfyui/custom_nodes && git clone https://github.com/cubiq/ComfyUI_IPAdapter_plus.git
 
+RUN cd /comfyui/custom_nodes && git clone https://github.com/injet-zhou/comfyui_extra_api.git
+RUN cd /comfyui/custom_nodes/comfyui_extra_api && . /comfyui/venv/bin/activate && pip3 install -r requirements.txt
+
 EXPOSE 8188
 
 CMD ["/bin/bash", "-c", "source venv/bin/activate && python3 main.py --listen 0.0.0.0"]
