@@ -109,6 +109,36 @@ if [ ! -e "/comfyui" ]; then
   ln -s "$COMFY_DIR" /comfyui
 fi
 
+# MODELS
+
+# gguf
+[ -f "$MODELS_DIR/unet/model.gguf" ] || (mkdir -p "$MODELS_DIR/unet" && cd "$MODELS_DIR/unet" && wget "https://civitai.com/api/download/models/2125565?token=$CIVITAI_TOKEN" -O model.gguf)
+
+# clip (t5xxl_fp8)
+[ -f "$MODELS_DIR/clip/t5xxl_fp8_e4m3fn_scaled.safetensors" ] || (
+  cd "$MODELS_DIR/clip" && \
+  wget "https://huggingface.co/comfyanonymous/flux_text_encoders/resolve/main/t5xxl_fp8_e4m3fn_scaled.safetensors"
+)
+
+# clip (vit-large-patch14)
+[ -f "$MODELS_DIR/clip/model.safetensors" ] || (
+  cd "$MODELS_DIR/clip" && \
+  wget "https://huggingface.co/openai/clip-vit-large-patch14/resolve/main/model.safetensors"
+)
+
+# vae (нужен токен HF)
+[ -f "$MODELS_DIR/vae/diffusion_pytorch_model.safetensors" ] || (
+  cd "$MODELS_DIR/vae" && \
+  wget --header="Authorization: Bearer $HUGGINGFACE_TOKEN" \
+    "https://huggingface.co/black-forest-labs/FLUX.1-dev/resolve/main/vae/diffusion_pytorch_model.safetensors"
+)
+
+# lora
+[ -f "$MODELS_DIR/lora/lora.safetensors" ] || (
+  cd "$MODELS_DIR/lora" && \
+  wget "https://huggingface.co/XLabs-AI/flux-RealismLora/resolve/main/lora.safetensors"
+)
+
 cd "$COMFY_DIR"
 echo "[i] Starting ComfyUI on 0.0.0.0:${COMFY_PORT:-8188}"
 exec python main.py --listen 0.0.0.0 --port "${COMFY_PORT:-8188}"
