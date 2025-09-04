@@ -129,13 +129,12 @@ fi
 # vae (нужен токен HF)
 [ -f "$MODELS_DIR/vae/diffusion_pytorch_model.safetensors" ] || (
   cd "$MODELS_DIR/vae" && \
-  wget --header="Authorization: Bearer $HUGGINGFACE_TOKEN" \
-    "https://huggingface.co/black-forest-labs/FLUX.1-dev/resolve/main/vae/diffusion_pytorch_model.safetensors"
+  wget --header="Authorization: Bearer $HUGGINGFACE_TOKEN" "https://huggingface.co/black-forest-labs/FLUX.1-dev/resolve/main/vae/diffusion_pytorch_model.safetensors"
 )
 
 # lora
-[ -f "$MODELS_DIR/lora/lora.safetensors" ] || (
-  cd "$MODELS_DIR/lora" && \
+[ -f "$MODELS_DIR/loras/lora.safetensors" ] || (
+  cd "$MODELS_DIR/loras" && \
   wget "https://huggingface.co/XLabs-AI/flux-RealismLora/resolve/main/lora.safetensors"
 )
 
