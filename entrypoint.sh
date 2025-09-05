@@ -35,11 +35,11 @@ if [ ! -d "$COMFY_DIR/.git" ]; then
   echo "[i] Cloning ComfyUI into NV…"
   git clone --depth=1 https://github.com/comfyanonymous/ComfyUI.git "$COMFY_DIR"
   git -C "$COMFY_DIR" submodule update --init --recursive || true
-else
-  echo "[i] Updating ComfyUI…"
-  git -C "$COMFY_DIR" fetch --depth=1 origin || true
-  git -C "$COMFY_DIR" reset --hard origin/master || git -C "$COMFY_DIR" pull --ff-only || true
-  git -C "$COMFY_DIR" submodule update --init --recursive || true
+# else
+#   echo "[i] Updating ComfyUI…"
+#   git -C "$COMFY_DIR" fetch --depth=1 origin || true
+#   git -C "$COMFY_DIR" reset --hard origin/master || git -C "$COMFY_DIR" pull --ff-only || true
+#   git -C "$COMFY_DIR" submodule update --init --recursive || true
 fi
 
 # 2) venv в NV
