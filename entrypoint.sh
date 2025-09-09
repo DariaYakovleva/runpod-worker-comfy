@@ -52,7 +52,7 @@ python -m pip install --upgrade pip wheel
 
 # 3) базовые зависимости (CUDA 12.1)
 pip install --no-cache-dir \
-  torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+  torch>=2.4.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 
 # 4) зависимости ComfyUI
 pip install --no-cache-dir -r "$COMFY_DIR/requirements.txt"
@@ -109,6 +109,12 @@ if [ ! -e "/comfyui" ]; then
   ln -s "$COMFY_DIR" /comfyui
 fi
 
+# ComfyUI Flux Trainer
+if [ ! -d "$CUSTOM_NODES_DIR/ComfyUI-FluxTrainer.git" ]; then
+  git clone --depth=1 https://github.com/kijai/ComfyUI-FluxTrainer.git "$CUSTOM_NODES_DIR/ComfyUI-FluxTrainer" || true
+  pip install --no-cache-dir -r "$CUSTOM_NODES_DIR/ComfyUI-FluxTrainer/requirements.txt" || true
+fi
+
 # MODELS
 
 # gguf
@@ -137,6 +143,19 @@ fi
   cd "$MODELS_DIR/loras" && \
   wget "https://huggingface.co/XLabs-AI/flux-RealismLora/resolve/main/lora.safetensors"
 )
+
+# vae for lora
+[ -f "$MODELS_DIR/vae/ae.safetensors" ] || (
+  cd "$MODELS_DIR/vae" && \
+  wget --header="Authorization: Bearer $HUGGINGFACE_TOKEN" "https://huggingface.co/black-forest-labs/FLUX.1-dev/resolve/main/ae.safetensors"
+)
+
+# flux dev for lora
+[ -f "$MODELS_DIR/checkpoints/flux1-dev.safetensors" ] || (
+  cd "$MODELS_DIR/checkpoints" && \
+  wget --header="Authorization: Bearer $HUGGINGFACE_TOKEN" "https://huggingface.co/black-forest-labs/FLUX.1-dev/resolve/main/flux1-dev.safetensors"
+)
+
 
 cd "$COMFY_DIR"
 echo "[i] Starting ComfyUI on 0.0.0.0:${COMFY_PORT:-8188}"
